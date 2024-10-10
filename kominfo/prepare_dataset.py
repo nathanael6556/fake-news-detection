@@ -7,14 +7,18 @@ from bs4 import BeautifulSoup
 
 def parse(news_detail:dict) -> dict:
     title = news_detail["title"]
-    category = re.match("\[([A-Z]+)\]", title).group(1).lower()
-    title = title[len(category) + 3:]
+    match = re.match("\[([A-Z]+)\]", title)
+    if match is not None:
+        category = match.group(1).lower()
+        title = title[len(category) + 3:]
+    else:
+        category = None
     title = title.strip()
 
     body = news_detail["body"]
     body = BeautifulSoup(body, features="lxml").text
-    body = body.strip("Penjelasan: ")
-    body = body[:body.rfind("Kategori: ")]
+    body = re.sub(r"^(kategori\s*:\s*(hoaks|disinformasi|misinformasi))?\s*penjelasan\s*:\s*", "", body, flags=re.IGNORECASE)
+    body = body[:body.lower().rfind("kategori: ")]
     body = body.strip()
 
     return dict(
@@ -34,7 +38,7 @@ def prepare() -> None:
         dataset.append(cleaned_data)
     
     df = pd.DataFrame(dataset)
-    df.to_csv(DATASET_PATH)
+    df.to_csv(DATASET_PATH, index=False)
 
 
 if __name__ == "__main__":
