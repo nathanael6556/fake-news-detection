@@ -13,8 +13,8 @@ def get_news_list(start_index, end_index, per_page=12):
     return result
 
 
-def retrieve(start_index, end_index):
-    news_list = get_news_list(start_index, end_index)
+def retrieve(start_index, end_index, per_page=12):
+    news_list = get_news_list(start_index, end_index, per_page)
     json_object = json.dumps(news_list, indent=4)
     with open(NEWS_LIST_PATH, "w") as f:
         f.write(json_object)
