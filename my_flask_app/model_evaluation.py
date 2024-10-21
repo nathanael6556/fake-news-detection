@@ -4,9 +4,9 @@ import pickle
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
 def predict_logistic(X, cutoff=0.5):
-    with open('../models/logistic.pkl', 'rb') as f:
+    with open('models/logistic.pkl', 'rb') as f:
         logistic_model = pickle.load(f)
-    with open('../models/logistic_vectorizer.pkl', 'rb') as f:
+    with open('models/logistic_vectorizer.pkl', 'rb') as f:
         vectorizer = pickle.load(f)
 
     # Convert X to list to match the expected input format
@@ -16,7 +16,7 @@ def predict_logistic(X, cutoff=0.5):
     return y_pred
 
 def predict_pac(X, cutoff=0.5):
-    with open('../models/pac_pipeline.pkl', 'rb') as f:
+    with open('models/pac_pipeline.pkl', 'rb') as f:
         pac_model = pickle.load(f)
 
     y = pac_model.predict([X])  # Convert X to list
@@ -24,7 +24,7 @@ def predict_pac(X, cutoff=0.5):
     return y_pred
 
 def predict_svm(X, cutoff=0.5):
-    with open('../models/svc_pipeline.pkl', 'rb') as f:
+    with open('models/svc_pipeline.pkl', 'rb') as f:
         svm_model = pickle.load(f)
 
     y = svm_model.predict([X])  # Convert X to list
@@ -32,9 +32,9 @@ def predict_svm(X, cutoff=0.5):
     return y_pred
 
 def predict_decision_tree(X, cutoff=0.5):
-    with open('../models/decision_tree_model.pkl', 'rb') as f:
+    with open('models/decision_tree_model.pkl', 'rb') as f:
         dtc_model = pickle.load(f)
-    with open('../models/decision_tree_vectorizer.pkl', 'rb') as f:
+    with open('models/decision_tree_vectorizer.pkl', 'rb') as f:
         vectorizer = pickle.load(f)
 
     X_vectorized = vectorizer.transform([X])  # Convert X to list
@@ -43,9 +43,9 @@ def predict_decision_tree(X, cutoff=0.5):
     return y_pred
 
 def predict_random_forest(X, cutoff=0.5):
-    with open('../models/random_forest_model.pkl', 'rb') as f:
+    with open('models/random_forest_model.pkl', 'rb') as f:
         rfc_model = pickle.load(f)
-    with open('../models/random_forest_vectorizer.pkl', 'rb') as f:
+    with open('models/random_forest_vectorizer.pkl', 'rb') as f:
         vectorizer = pickle.load(f)
 
     X_vectorized = vectorizer.transform([X])  # Convert X to list
@@ -54,9 +54,9 @@ def predict_random_forest(X, cutoff=0.5):
     return y_pred
 
 def predict_gradient_boosting(X, cutoff=0.5):
-    with open('../models/gradient_boosting_model.pkl', 'rb') as f:
+    with open('models/gradient_boosting_model.pkl', 'rb') as f:
         gbc_model = pickle.load(f)
-    with open('../models/gradient_boosting_vectorizer.pkl', 'rb') as f:
+    with open('models/gradient_boosting_vectorizer.pkl', 'rb') as f:
         vectorizer = pickle.load(f)
 
     X_vectorized = vectorizer.transform([X])  # Convert X to list
@@ -65,7 +65,7 @@ def predict_gradient_boosting(X, cutoff=0.5):
     return y_pred
 
 def predict_xgboost(X, cutoff=0.5):
-    with open('../models/xgboost_pipeline.pkl', 'rb') as f:
+    with open('models/xgboost_pipeline.pkl', 'rb') as f:
         xgboost_model = pickle.load(f)
 
     y = xgboost_model.predict([X])  # Convert X to list

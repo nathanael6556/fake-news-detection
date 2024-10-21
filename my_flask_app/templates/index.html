@@ -158,22 +158,26 @@
             <button type="submit">Check</button>
         </form>
 
-        <!-- Loader Element -->
         <div id="loader"></div>
 
-        <!-- Result and Confidence Percentage -->
         {% if result %}
         <div class="result">
-            <h2>Result: {{ result }}</h2>
-            {% if real_percentage is not none %}
-            <div class="percentage-container">
-                <div class="percentage-text" id="percentageText">0% of text is likely real</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
-                </div>
+            <h2>Hasil: {{ result }}</h2>
+            <div class="status-container">
+                <!-- Loop through y_status and display each status -->
+                {% if y_status %}
+                <ul style="list-style-type: none; padding-left: 0;">
+                    {% for status in y_status %}
+                    <li>{{ status }}</li> <!-- Display each status in a list -->
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <!-- <div class="percentage-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                    </div>
+                </div> -->
             </div>
-            
-            {% endif %}
         </div>
         {% endif %}
 
@@ -214,21 +218,10 @@
     </script>
 
 <script>
-    // Get real percentage from Flask
-    const realPercentage = {{ real_percentage | default(0, true) }};  // Safeguard if the value is None
+    const yPercent = {{ y_percent | default(0, true) }};
 
-    // If realPercentage exists, update the percentage bar
-    if (realPercentage || realPercentage === 0) {
-        const fakePercentage = 100 - realPercentage;  // Calculate fake percentage
-
-        // Update the text display for the real percentage
-        document.getElementById('percentageText').textContent = realPercentage + '% of text is likely real';
-
-        // Adjust the width of the progress bar based on real percentage
-        document.getElementById('progressFill').style.width = realPercentage + '%';
-
-        // Optional: If you want to show the fake percentage as well, you can log or display it somewhere
-        console.log('Fake Percentage: ' + fakePercentage + '%');
+    if (yPercent) {
+        document.getElementById('progressFill').style.width = yPercent + '%';
     }
 </script>
 
