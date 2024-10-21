@@ -1,6 +1,8 @@
 requests
 beautifulsoup4
-pandas
+lxml
+numpy
 indonlp
 scikit-learn
+xgboost
 Flask
