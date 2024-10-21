@@ -10,16 +10,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
 
-
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --bd-purple: #4c0bce;
@@ -82,6 +75,59 @@
             font-weight: bold;
             color: #555;
         }
+
+        /* Spinner Styles */
+        #loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid blue;
+            border-right: 16px solid green;
+            border-bottom: 16px solid red;
+            border-left: 16px solid pink;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            display: none;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .percentage-container {
+            width: 300px;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .percentage-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #36a2eb;
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
     </style>
 </head>
 
@@ -106,17 +152,27 @@
             </div>
         </div>
 
-        <form class="d-flex flex-column mb-3" method="POST">
+        <form class="d-flex flex-column mb-3" id="newsForm" method="POST">
             <label id="newsLabel" for="news">Enter the news article text:</label>
             <textarea id="news" name="news" rows="5" placeholder="Paste your news here..."></textarea>
             <button type="submit">Check</button>
         </form>
 
+        <!-- Loader Element -->
+        <div id="loader"></div>
+
+        <!-- Result and Confidence Percentage -->
         {% if result %}
         <div class="result">
             <h2>Result: {{ result }}</h2>
-            {% if fake_percentage is not none %}
-            <p>Confidence: {{ fake_percentage }}% fake</p>
+            {% if real_percentage is not none %}
+            <div class="percentage-container">
+                <div class="percentage-text" id="percentageText">0% of text is likely real</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+            </div>
+            
             {% endif %}
         </div>
         {% endif %}
@@ -142,7 +198,40 @@
                 newsText.placeholder = 'Paste your news here...';
             }
         }
+
+        const form = document.getElementById('newsForm');
+        const loader = document.getElementById('loader');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();  // Prevent immediate submission
+            loader.style.display = 'block';  // Show the loader
+
+            // Delay form submission by 10 seconds
+            setTimeout(() => {
+                form.submit();  // Submit form after 10 seconds
+            }, 5000);  // 10000 ms = 10 seconds
+        });
     </script>
+
+<script>
+    // Get real percentage from Flask
+    const realPercentage = {{ real_percentage | default(0, true) }};  // Safeguard if the value is None
+
+    // If realPercentage exists, update the percentage bar
+    if (realPercentage || realPercentage === 0) {
+        const fakePercentage = 100 - realPercentage;  // Calculate fake percentage
+
+        // Update the text display for the real percentage
+        document.getElementById('percentageText').textContent = realPercentage + '% of text is likely real';
+
+        // Adjust the width of the progress bar based on real percentage
+        document.getElementById('progressFill').style.width = realPercentage + '%';
+
+        // Optional: If you want to show the fake percentage as well, you can log or display it somewhere
+        console.log('Fake Percentage: ' + fakePercentage + '%');
+    }
+</script>
+
 </body>
 
 </html>
