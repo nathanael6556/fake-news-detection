@@ -40,13 +40,16 @@ def home():
     result = None
     y_percent = 0  # Inisialisasi y_percent dengan nilai default
     y_status = None
+    text = None
 
     if request.method == 'POST':
         text = request.form['news']
         mode = request.form['mode']
         result, y_percent, y_status = get_prediction(text, mode)
     
-    return render_template('index.html', result=result, y_percent=y_percent, y_status=y_status) 
+    
+    
+    return render_template('index.html', result=result, y_percent=y_percent, y_status=y_status, text=text) 
 
 if __name__ == '__main__':
     app.run(debug=True)

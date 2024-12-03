@@ -154,7 +154,12 @@
 
         <form class="d-flex flex-column mb-3" id="newsForm" method="POST">
             <label id="newsLabel" for="news">Enter the news article text:</label>
-            <textarea id="news" name="news" rows="5" placeholder="Paste your news here..."></textarea>
+            {% if result %}
+                <textarea id="news" name="news" rows="5">{{ text }}</textarea>
+            {% else %}
+                <textarea id="news" name="news" rows="5" placeholder="Paste your news here..."></textarea>
+            {% endif %}
+            
             <input id="mode" name="mode" value="text" hidden aria-hidden/>
             <button type="submit">Check</button>
         </form>
